@@ -1,25 +1,25 @@
 #import "@preview/cetz:0.4.2"
 #import "@preview/fletcher:0.5.8" as fletcher: node, edge
 #import "@preview/touying:0.6.1": *
-#import "../lib.typ": * // i.e. "@preview/touying-simpl-cau:<latest>"
+#import "../lib.typ": * // i.e. "@preview/touying-simpl-ecnu:<latest>"
 
 // cetz and fletcher bindings for touying
 #let cetz-canvas = touying-reducer.with(reduce: cetz.canvas, cover: cetz.draw.hide.with(bounds: true))
 #let fletcher-diagram = touying-reducer.with(reduce: fletcher.diagram, cover: fletcher.hide)
 
-#show: cau-theme.with(
+#show: ecnu-theme.with(
   // Lang and font configuration
   lang: "zh",
   font: ("Libertinus Serif", "Source Han Sans SC", "Source Han Sans"),
 
   // Basic information
   config-info(
-    title: [基于 Touying 的中国农业大学 Typst 幻灯片模板 \ 源自 touying-buaa],
-    short-title: [基于 Touying 的中国农业大学 Typst 幻灯片模板],
-    subtitle: [Typst Slide Theme for China Agricultural University Based on Touying],
-    author: [Yip Coekjan, Max Chang],
+    title: [基于 Touying 的华东师范大学 Typst 幻灯片模板 \ 源自 touying-buaa],
+    short-title: [基于 Touying 的华东师范大学 Typst 幻灯片模板],
+    subtitle: [Typst Slide Theme for East China Normal University Based on Touying],
+    author: [Yip Coekjan, Max Chang, CCYoung],
     date: datetime.today(),
-    institution: [中国农业大学],
+    institution: [华东师范大学],
   ),
 
   // Pdfpc configuration
@@ -245,10 +245,10 @@
 #slide[
   - 您可以使用：
     ```sh
-    typst init @preview/touying-simpl-cau
+    typst init @preview/touying-simpl-ecnu
     ```
     来创建基于本模板的演示文稿项目。
 
   - 本模板修改自 #link("https://github.com/Coekjan/touying-buaa")，欢迎关注与贡献。
-  - 本模板仓库地址为 #link("https://github.com/maxchang3/touying-simpl-cau")，欢迎关注与贡献。
+  - 本模板仓库地址为 #link("https://github.com/ccyoung3/touying-simpl-ecnu")，欢迎关注与贡献。
 ]

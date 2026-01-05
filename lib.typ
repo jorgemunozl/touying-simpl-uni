@@ -1,5 +1,5 @@
 /**
- *  Stargazer theme - adapted for CAU
+ *  Stargazer theme - adapted for ECNU
  * */
 
 #import "@preview/touying:0.6.1": *
@@ -13,10 +13,10 @@
 /// - font (array): 字体覆盖列表
 /// - use-background (bool): 是否使用背景图 
 /// -> 
-#let cau-theme(
+#let ecnu-theme(
   aspect-ratio: "16-9",
   lang: "en",
-  font: ("Libertinus Serif", "Source Han Sans SC", "Noto Sans CJK SC", "SimHei", "Heiti SC", "STHeiti"),
+  font: ("Libertinus Serif", "Source Han Sans SC", "Noto Sans SC", "SimHei", "Heiti SC", "STHeiti"),
   use-background: true,
   ..args,
   body,
@@ -26,27 +26,30 @@
 
   show: stargazer-theme.with(
     aspect-ratio: aspect-ratio,
-    config-info(logo: image("assets/CAU_logo.svg")),
+   header-right: grid(
+      columns: 2,
+      image("assets/ecnu_logo.png"),
+      image("assets/ecnu_title.png")
+    ),
     config-colors(
-      primary: rgb("#4d7c2b"),
-      primary-dark: rgb("#3d5c27"),
+      primary: rgb("#b60b2d"),
+      primary-dark: rgb("#5a0718"),
       secondary: rgb("#fdd100"),
-      tertiary: rgb("#006600"),
+      tertiary: rgb("#004f71"),
       neutral-lightest: rgb("#ffffff"),
-      neutral-darkest: rgb("#000000"),
+      neutral-darkest: rgb("#5a0718"),
     ),
     config-page(
       background: if use-background {
         place(
           center + horizon,
-          dx: 47%,
-          dy: 7%,
-          image("assets/Gate.svg", width: 75%),
+          dx: 13%,
+          image("assets/ecnu_background.png", width: 75%),
         )
       } else {
         none
       },
-    ),
+      ),
     ..args,
   )
 
