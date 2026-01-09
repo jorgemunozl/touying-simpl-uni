@@ -62,118 +62,9 @@
 ]
 
 = Touying 幻灯片动画
+---
+略
 
-== 简单动画
-
-使用 ```typ #pause``` #pause 暂缓显示内容。
-
-#pause
-
-就像这样。
-
-#meanwhile
-
-同时，#pause 我们可以使用 ```typ #meanwhile``` 来 #pause 显示同时其他内容。
-
-#speaker-note[
-  使用 ```typ config-common(show-notes-on-second-screen: right)``` 来启用演讲提示，否则将不会显示。
-]
-
-
-== 复杂动画 - Mark-Style
-
-在子幻灯片 #touying-fn-wrapper((self: none) => str(self.subslide)) 中，我们可以：
-
-使用 #uncover("2-")[```typ #uncover``` 函数]（预留空间）
-
-使用 #only("2-")[```typ #only``` 函数]（不预留空间）
-
-#alternatives[多次调用 ```typ #only``` 函数 \u{2717}][使用 ```typ #alternatives``` 函数 #sym.checkmark] 从多个备选项中选择一个。
-
-
-== 复杂动画 - Callback-Style
-
-#slide(
-  repeat: 3,
-  self => [
-    #let (uncover, only, alternatives) = utils.methods(self)
-
-    在子幻灯片 #self.subslide 中，我们可以：
-
-    使用 #uncover("2-")[```typ #uncover``` 函数]（预留空间）
-
-    使用 #only("2-")[```typ #only``` 函数]（不预留空间）
-
-    #alternatives[多次调用 ```typ #only``` 函数 \u{2717}][使用 ```typ #alternatives``` 函数 #sym.checkmark] 从多个备选项中选择一个。
-  ],
-)
-
-
-== 数学公式动画
-
-在 Touying 数学公式中使用 `pause`:
-
-#touying-equation(`
-  f(x)  &= pause x^2 + 2x + 1  \
-        &= pause (x + 1)^2  \
-`)
-
-#meanwhile
-
-如您所见，#pause 这是 $f(x)$ 的表达式。
-
-#pause
-
-通过因式分解，我们得到了结果。
-
-= 与其他 Typst 包集成
-
-== CeTZ 动画
-
-在 Touying 中集成 CeTZ 动画：
-
-#cetz-canvas({
-  import cetz.draw: *
-
-  rect((0, 0), (5, 5))
-
-  (pause,)
-
-  rect((0, 0), (1, 1))
-  rect((1, 1), (2, 2))
-  rect((2, 2), (3, 3))
-
-  (pause,)
-
-  line((0, 0), (2.5, 2.5), name: "line")
-})
-
-
-== Fletcher 动画
-
-在 Touying 中集成 Fletcher 动画：
-
-#fletcher-diagram(
-  node-stroke: .1em,
-  node-fill: gradient.radial(blue.lighten(80%), blue, center: (30%, 20%), radius: 80%),
-  spacing: 4em,
-  edge((-1, 0), "r", "-|>", `open(path)`, label-pos: 0, label-side: center),
-  node((0, 0), `reading`, radius: 2em),
-  edge((0, 0), (0, 0), `read()`, "--|>", bend: 130deg),
-  pause,
-  edge(`read()`, "-|>"),
-  node((1, 0), `eof`, radius: 2em),
-  pause,
-  edge(`close()`, "-|>"),
-  node((2, 0), `closed`, radius: 2em, extrude: (-2.5, 0)),
-  edge((0, 0), (2, 0), `close()`, "-|>", bend: -40deg),
-)
-
-== 其他例子
-
-#tblock(title: [Pinit, MiTeX, Codly, Ctheorems...])[
-  Touying 社区正在探索与更多 Typst 包的集成，详细情况可查阅#link("https://touying-typ.github.io/zh/docs/category/package-integration/")[文档]。
-]
 
 = 其他功能
 
@@ -249,6 +140,6 @@
     ```
     来创建基于本模板的演示文稿项目。
 
-  - 本模板修改自 #link("https://github.com/Coekjan/touying-buaa")，欢迎关注与贡献。
-  - 本模板仓库地址为 #link("https://github.com/ccyoung3/touying-simpl-ecnu")，欢迎关注与贡献。
+  - 模板修改自 #link("https://github.com/Coekjan/touying-buaa")，欢迎关注与贡献。
+  - 模板仓库地址为 #link("https://github.com/ccyoung3/touying-simpl-ecnu")，欢迎关注与贡献。
 ]
