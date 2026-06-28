@@ -3,3 +3,5 @@ build/*
 
 
 identify -verbose image_name.png
+
+slides/

@@ -6,17 +6,11 @@
 #import "@preview/numbly:0.1.0": numbly
 #import themes.stargazer: *
 
-/// 模板的核心类，规范了文档的格式。
-/// 
-/// - aspect-ratio (str): 纵横比 
-/// - lang (str):  语言
-/// - font (array): 字体覆盖列表
-/// - use-background (bool): 是否使用背景图 
-/// -> 
+/// ->
 #let ecnu-theme(
   aspect-ratio: "16-9",
   lang: "en",
-  font: ("Libertinus Serif", "Source Han Sans SC", "Noto Sans SC", "SimHei", "Heiti SC", "STHeiti"),
+  font: "Libertinus Serif",
   use-background: true,
   ..args,
   body,
@@ -26,10 +20,9 @@
 
   show: stargazer-theme.with(
     aspect-ratio: aspect-ratio,
-   header-right: grid(
+    header-right: grid(
       columns: 2,
-      image("assets/ecnu_logo.png"),
-      image("assets/ecnu_title.png")
+      image("assets/ecnu_logo.png"), image("assets/ecnu_title.png"),
     ),
     config-colors(
       primary: rgb("#b60b2d"),
@@ -49,7 +42,7 @@
       } else {
         none
       },
-      ),
+    ),
     ..args,
   )
 
