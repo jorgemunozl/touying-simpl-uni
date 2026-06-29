@@ -63,119 +63,100 @@ $V_(x c)[n] = frac(delta E_(x c)[n], delta n(bold(r)))$ the exchange-correlation
 and $V_"ext"$ the external potential from the nuclei.
 
 
-== The Problem: A Self-Referential Equation
+== Kohn--Sham is self-referential
 
-The Kohn--Sham (KS) equations map an interacting many-body problem onto a
-non-interacting system with the same ground-state density:
+The Kohn--Sham equations are *self-referential*: the Hamiltonian $H_"KS"$ depends
+on the density $n(bold(r))$, but the density is built from the KS orbitals
+$n(bold(r)) = sum_i f_i |psi_i(bold(r))|^2$. Unlike the fixed Schrödinger
+Hamiltonian, every $V_H[n]$ and $V_(x c)[n]$ term must be recomputed when $n$
+changes.
 
+#highlight["The Hamiltonian determines the density, and the density determines
+  the Hamiltonian."] This circular dependence forces an *iterative* solution — the Self-Consistent Field (SCF) cycle:
 
-#tblock(title: [The Self-Consistency Problem])[
-  The effective Hamiltonian $H_"KS"$ depends on the electron density $n(bold(r))$,
-  but the density is itself constructed from the KS orbitals:
+But before of that, we need a form to write down $psi(r)$, so we need to choose a basis set.
 
-  $
-    n(bold(r)) = sum_i f_i |psi_i(bold(r))|^2
-  $
+== A Basis Set where the wave functions are expressed
 
-  #highlight["The Hamiltonian determines the density, and the density determines
-    the Hamiltonian."] This circular dependence means the KS equations must be
-  solved *iteratively* until the input and output densities agree.
-]
+To solve the KS equations numerically, we expand the orbitals $psi_i(bold(r))$ in a *basis set*. The choice of basis dramatically affects computational cost and accuracy.
 
+*Plane Wave (PW) Basis*
 
-#tblock(title: [Why can't we solve it directly?])[
-  Unlike the Schrödinger equation, where $hat(H)$ is fixed by the external
-  potential alone, $H_"KS"$ contains terms that are functionals of the unknown
-  density:
+In periodic systems (crystals), Bloch's theorem allows us to write:
 
-  $
-    H_"KS"[n] = -frac(1, 2) nabla^2 + V_"ext"(bold(r)) + V_"Hartree"[n] + V_"xc"[n]
-  $
+$ psi_(n bold(k))(bold(r)) = e^(i bold(k) dot.op bold(r)) u_(n bold(k))(bold(r)) $
 
-  Each term in red ($V_"Hartree"$, $V_"xc"$) must be recomputed every time the
-  density changes — we cannot write down $H_"KS"$ until we already know $n(bold(r))$.
-]
+where $u_(n bold(k))(bold(r))$ has the periodicity of the lattice. We expand $u$ in plane waves:
 
-== 1.1.2 The Self-Consistent Field (SCF) Cycle
+$ u_(n bold(k))(bold(r)) = sum_(bold(G)) c_(n bold(k))(bold(G)) e^(i bold(G) dot.op bold(r)) $
 
-#tblock(title: [The Iterative SCF Loop])[
-  The self-consistent field method turns the circular problem into a convergent
-  sequence:
-]
+where $bold(G)$ are reciprocal lattice vectors. In practice,
+the sum is truncated at a kinetic energy cutoff, but in practice is better use PAW basis.
 
-#v(0.3em)
+// == PAW Basis
+//
+// The *Projector Augmented Wave (PAW)* method (Blöchl, 1994) is an all-electron approach that combines efficiency of pseudopotentials with full nodal structure near nuclei.
+//
+// *Core Idea:* The true wavefunction $psi$ is related to a smooth pseudo-wavefunction $tilde(psi)$ via:
+//
+// $ psi = tilde(psi) + sum_i (phi_i - tilde(phi)_i) ⟨ tilde(p)_i | tilde(psi) ⟩ $
+//
+// where $tilde(psi)$ is smooth (expanded in plane waves with low $E_"cut"$), $phi_i$ are all-electron partial waves (localized, contain nodes), $tilde(phi)_i$ are pseudo partial waves, and $tilde(p)_i$ are projector functions.
+//
+// #highlight[Key benefit:] Accurate magnetic and core properties while keeping plane-wave efficiency. Used by VASP, ABINIT, and other modern DFT codes.
 
-#fletcher-diagram(
-  node-stroke: 1pt,
-  edge-stroke: 0.8pt,
-  node((0, 0), [Initial guess $n^((0))(bold(r))$]),
-  node((0, -1.5), [Build $H_"KS"[n^((k))]$]),
-  node((0, -3.0), [Diagonalize: $H_"KS" psi_i = epsilon_i psi_i$]),
-  node((0, -4.5), [Compute new density $n_"out"^((k))(bold(r))$]),
-  node((0, -6.0), [Check: $||n_"out" - n_"in"|| < delta$?]),
-  node((3, -6.0), [*Done*]),
-  edge((0, 0), (0, -1.5)),
-  edge((0, -1.5), (0, -3.0)),
-  edge((0, -3.0), (0, -4.5)),
-  edge((0, -4.5), (0, -6.0)),
-  edge((0, -6.0), (3, -6.0), [yes]),
-  edge((0, -6.0), (-2, -6.0), [no], "->", bend: 50deg),
-  edge((-2, -6.0), (-2, 0), bend: 50deg),
-  edge((-2, 0), (0, 0)),
+== Pseudopotentials
+
+#grid(
+  columns: (1.5fr, 1fr),
+  column-gutter: 1em,
+  [
+    Core electrons are tightly bound and chemically inert — they don't participate in bonding. However, their rapid oscillations near the nucleus require huge plane-wave cutoffs.
+
+    *Pseudopotential Approximation:* Replace the all-electron potential $V_"ion"$ and core electrons with an effective *pseudopotential* $V_"pseudo"$ that:
+
+    1. Reproduces the correct valence properties (scattering, eigenvalues)
+    2. Has smooth, nodeless *pseudo-wavefunctions* outside a core radius $r_c$
+
+    $
+      V_"pseudo"(r) = cases(
+        "smooth" & r < r_c,
+        V_"ion"(r) & r > r_c
+      )
+    $
+
+    #highlight[Result:] Valence wavefunctions $tilde(psi)_"valence"$ are smooth → low $E_"cut"$ (typically 300-600 eV instead of several keV).
+
+    *Common types:* Norm-conserving (NC-PP), ultrasoft (US-PP), and PAW.
+  ],
+  [
+    #figure(
+      image("img/pseudo.jpg"),
+      caption: "Pseudopotential Approximation",
+    )
+  ],
 )
 
-#pause
 
-#tblock(title: [Key Insight])[
-  At convergence, the input and output densities are identical:
-  $n_"in"(bold(r)) = n_"out"(bold(r)) = n_"SCF"(bold(r))$.
+== The Self-Consistent Field (SCF) Method is a loop
 
-  The converged density is then used to compute total energy, forces, and all
-  other observables. A single SCF cycle typically requires 10--50 iterations.
-]
+When running a SCF calculation, e.g. quantum espresso, what the SCF cycle does is:
 
-== 1.1.3 Convergence & Density Mixing
+1. *Initial Guess*: Start with an approximate $n^((0))(bold(r))$, often a superposition of atomic charge densities.
 
-#tblock(title: [Naive Linear Mixing])[
-  The simplest approach is to mix old and new densities:
+2. *Construct $H_"KS"$*: Build the KS Hamiltonian:
+  $ H_"KS" = -frac(1, 2) nabla^2 + V_"ext" + V_"Hartree"[n] + V_(x c)[n] $
 
-  $
-    n_"in"^((k+1)) = (1 - alpha) n_"in"^((k)) + alpha n_"out"^((k))
-  $
+3. *Diagonalize*: Solve the generalized eigenvalue problem:
+  $ H c_i = epsilon_i S c_i quad "(in a plane-wave or PAW basis)" $
 
-  where $alpha in (0, 1]$ is the mixing parameter.
+== The self-consistent field (SCF) cycle
 
-  #text(fill: red)[Problem:] The KS response contains long-wavelength charge
-  sloshing modes. Small $alpha$ (e.g., 0.05--0.1) is stable but *very slow*;
-  larger $alpha$ leads to wild oscillations — the *charge-sloshing instability*.
-]
+4. *New Density*: Compute the output density:
+  $ n_"out"(bold(r)) = sum_i f_i |Psi_i(bold(r))|^2 quad (f_i = "occupation") $
 
-#pause
+5. *Check Convergence*: If $||n_"out" - n_"in"|| < delta arrow.r$ done. Otherwise: mix $n_"in"$ and $n_"out"$, return to step 2.
 
-#tblock(title: [Advanced Mixing Schemes (used by VASP)])[
-  Modern codes use history-aware methods that build an optimal linear combination
-  of past densities and residuals:
-
-  - *Pulay mixing* (DIIS): Minimizes the residual norm over a subspace spanned
-    by previous iterations, effectively damping unstable charge modes.
-  - *Broyden mixing*: A quasi-Newton approach that approximates the inverse
-    dielectric matrix, accelerating convergence for "stiff" systems.
-
-  #highlight[VASP defaults:] Broyden mixing (IMIX = 4) with AMIX ~ 0.4 and
-  BMIX ~ 1.0, typically achieving convergence in 10--40 SCF steps.
-]
-
----
-
-#tblock(title: [Convergence Metrics])[
-  SCF convergence is judged by multiple criteria:
-
-  - *Density change:* $||n^((k+1)) - n^((k))|| < "EDIFF"/sqrt(N_"atoms")$
-  - *Energy change:* $|E^((k+1)) - E^((k))| < "EDIFF"$
-  - *Band energy:* $|sum_n epsilon_n^((k+1)) - sum_n epsilon_n^((k))| < delta$
-
-  These are monitored simultaneously; all must be satisfied for convergence.
-]
 
 = How you are supposed to interpretate the data from the calculations
 
