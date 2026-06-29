@@ -4,4 +4,7 @@ build/*
 
 identify -verbose image_name.png
 
-slides/
+*.png
+*.svg
+
+*.webp

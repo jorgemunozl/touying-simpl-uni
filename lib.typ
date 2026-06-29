@@ -16,7 +16,7 @@
   body,
 ) = {
   set text(lang: lang, font: font)
-  set heading(numbering: numbly("{1}.", default: "1.1"))
+  // set heading(numbering: numbly("{1}.", default: "1.1"))
 
   show: stargazer-theme.with(
     aspect-ratio: aspect-ratio,
