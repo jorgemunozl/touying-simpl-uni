@@ -16,11 +16,11 @@ Adapted from the [Touying slide theme for ECNU](https://github.com/ccyoung3/touy
 
 ```typst
 #import "@preview/touying:0.6.1": *
-#import "@preview/touying-simpl-ecnu:0.0.1": *
+#import "@local/touying-simpl-uni:1.0.0": *
 
-#show: ecnu-theme.with(
+#show: uni-theme.with(
     config-info(
-        title: [Touying for ECNU: Customize Your Slide Title Here],
+        title: [Touying for UNI: Customize Your Slide Title Here],
         subtitle: [Customize Your Slide Subtitle Here],
         author: [Authors],
         date: datetime.today(),
@@ -41,11 +41,26 @@ Adapted from the [Touying slide theme for ECNU](https://github.com/ccyoung3/touy
 Quickly scaffold a new presentation with:
 
 ```console
-$ typst init @preview/touying-simpl-ecnu
-Successfully created new project from @preview/touying-simpl-ecnu:<latest>
+$ typst init @preview/touying-simpl-uni
+Successfully created new project from @preview/touying-simpl-uni:<latest>
 To start writing, run:
-> cd touying-simpl-ecnu
+> cd touying-simpl-uni
 > typst watch main.typ
+```
+
+## How to use it like local package
+
+You have to symlink this package to your local Typst packages directory.
+
+```bash
+mkdir -p ~/.local/share/typst/packages/local/touying-simpl-uni
+ln -s ./touying-simpl-uni/* ~/.local/share/typst/packages/local/touying-simpl-uni/*
+```
+
+And use it in your Typst project:
+
+```typst
+#import "@local/touying-simpl-uni:1.0.0" 
 ```
 
 ## Examples
