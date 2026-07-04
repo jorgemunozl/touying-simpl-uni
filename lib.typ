@@ -43,6 +43,23 @@
         none
       },
     ),
+    config-methods(
+      init: (self: none, body) => {
+        set text(size: 20pt)
+        set list(marker: components.knob-marker(primary: self.colors.primary))
+        show figure.caption: set text(size: 0.9em)
+        show footnote.entry: set text(size: 0.6em)
+        show heading: set text(fill: self.colors.primary)
+        show link: it => if type(it.dest) == str {
+          set text(fill: self.colors.primary)
+          it
+        } else {
+          it
+        }
+        show figure.where(kind: table): set figure.caption(position: top)
+        body
+      },
+    ),
     ..args,
   )
 
