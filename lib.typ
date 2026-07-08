@@ -6,6 +6,9 @@
 #import "@preview/numbly:0.1.0": numbly
 #import themes.stargazer: *
 
+// ── Table templates ─────────────────────────────────────────
+#import "functions/tables.typ": comparison-table, convergence-table, data-table, error-table, prop-table
+
 /// ->
 #let ecnu-theme(
   aspect-ratio: "16-9",
