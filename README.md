@@ -53,14 +53,17 @@ To start writing, run:
 You have to symlink this package to your local Typst packages directory.
 
 ```bash
+# Create the directory for the local package
 mkdir -p ~/.local/share/typst/packages/local/touying-simpl-uni
-ln -s ./touying-simpl-uni/* ~/.local/share/typst/packages/local/touying-simpl-uni/*
+
+# Link this directory as version 1.0.0
+ln -s "$(pwd)" ~/.local/share/typst/packages/local/touying-simpl-uni/1.0.0
 ```
 
 And use it in your Typst project:
 
 ```typst
-#import "@local/touying-simpl-uni:1.0.0" 
+#import "@local/touying-simpl-uni:1.0.0": *
 ```
 
 ## Examples
